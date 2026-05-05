@@ -16,7 +16,7 @@ export default function CreatePostPage() {
   const [type, setType] = useState<PostType>("lost");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [location, setLocation] = useState(CITIES[0] ?? "Peshawar");
+  const [location, setLocation] = useState<string>(CITIES[0] ?? "Peshawar");
   const [contact, setContact] = useState("");
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
