@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import AuthNotice from "@/components/AuthNotice";
 import CommunityStats from "@/components/CommunityStats";
 import PostsBrowser from "@/components/PostsBrowser";
@@ -9,7 +10,9 @@ export default function Home() {
   return (
     <div className="mx-auto w-full max-w-6xl px-4 pb-16">
       <div className="mt-6">
-        <AuthNotice />
+        <Suspense fallback={null}>
+          <AuthNotice />
+        </Suspense>
       </div>
       <section className="relative mt-10 overflow-hidden rounded-[32px] border border-black/10 bg-white/80 p-8 shadow-sm md:mt-16 md:p-12">
         <div className="absolute -right-20 -top-24 h-60 w-60 rounded-full bg-emerald-100 blur-3xl" />
