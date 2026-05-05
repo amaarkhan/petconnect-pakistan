@@ -52,8 +52,11 @@ export default function PostsBrowser() {
         setLoading(false);
         setError("");
       },
-      () => {
-        setError("Unable to load posts right now.");
+      (err) => {
+        console.error("Failed to load posts:", err);
+        const message =
+          err instanceof Error ? err.message : "Unable to load posts right now.";
+        setError(message);
         setLoading(false);
       },
     );
