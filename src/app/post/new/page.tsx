@@ -12,7 +12,7 @@ import type { PostType } from "@/lib/types";
 export default function CreatePostPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const db = getFirebaseDb();
+  const [db, setDb] = useState<ReturnType<typeof getFirebaseDb>>(null);
   const [type, setType] = useState<PostType>("lost");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -20,6 +20,10 @@ export default function CreatePostPage() {
   const [contact, setContact] = useState("");
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    setDb(getFirebaseDb());
+  }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

@@ -25,7 +25,7 @@ export default function PostDetailPage() {
   const { user } = useAuth();
   const params = useParams<{ id: string }>();
   const postId = params?.id;
-  const db = getFirebaseDb();
+  const [db, setDb] = useState<ReturnType<typeof getFirebaseDb>>(null);
   const [post, setPost] = useState<Post | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
   const [commentText, setCommentText] = useState("");
@@ -33,6 +33,10 @@ export default function PostDetailPage() {
   const [commentLoading, setCommentLoading] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    setDb(getFirebaseDb());
+  }, []);
 
   useEffect(() => {
     if (!db || !postId) {

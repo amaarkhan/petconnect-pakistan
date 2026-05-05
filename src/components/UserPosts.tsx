@@ -19,13 +19,13 @@ import { formatDate } from "@/lib/format";
 
 export default function UserPosts() {
   const { user } = useAuth();
-  const db = getFirebaseDb();
+  const [db, setDb] = useState<ReturnType<typeof getFirebaseDb>>(null);
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
-  if (!db) {
-    return null;
-  }
+  useEffect(() => {
+    setDb(getFirebaseDb());
+  }, []);
 
   useEffect(() => {
     if (!db) {

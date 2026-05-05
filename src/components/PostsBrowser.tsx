@@ -21,12 +21,16 @@ const typeOptions = [
 ];
 
 export default function PostsBrowser() {
-  const db = getFirebaseDb();
+  const [db, setDb] = useState<ReturnType<typeof getFirebaseDb>>(null);
   const [type, setType] = useState<"all" | PostType>("all");
   const [city, setCity] = useState<string>(CITIES[0] ?? "Peshawar");
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    setDb(getFirebaseDb());
+  }, []);
 
   useEffect(() => {
     if (!db) {
