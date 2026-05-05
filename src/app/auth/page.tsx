@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FirebaseError } from "firebase/app";
@@ -14,12 +14,9 @@ import {
 } from "firebase/auth";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import LoadingState from "@/components/LoadingState";
-import { getFirebaseAuth, getFirebaseDb } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
 
 export default function AuthPage() {
-  const [auth, setAuth] = useState<ReturnType<typeof getFirebaseAuth>>(null);
-  const [db, setDb] = useState<ReturnType<typeof getFirebaseDb>>(null);
-  const [firebaseReady, setFirebaseReady] = useState(false);
   const [tab, setTab] = useState<"email" | "phone">("email");
   const [mode, setMode] = useState<"login" | "signup">("signup");
   const [name, setName] = useState("");
@@ -63,13 +60,7 @@ export default function AuthPage() {
     return "Unknown error";
   };
 
-  useEffect(() => {
-    setAuth(getFirebaseAuth());
-    setDb(getFirebaseDb());
-    setFirebaseReady(true);
-  }, []);
-
-  if (!firebaseReady || !auth || !db) {
+  if (!auth || !db) {
     return (
       <div className="mx-auto w-full max-w-4xl px-4 py-12">
         <LoadingState label="Loading authentication" />

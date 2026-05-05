@@ -2,10 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
-import { getFirebaseDb } from "@/lib/firebase";
+import { db } from "@/lib/firebase";
 
 export default function CommunityStats() {
-  const db = getFirebaseDb();
   const [count, setCount] = useState<number | null>(null);
 
   useEffect(() => {

@@ -11,7 +11,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { getFirebaseDb } from "@/lib/firebase";
+import { db } from "@/lib/firebase";
 import { useAuth } from "@/app/providers";
 import type { Post } from "@/lib/types";
 import LoadingState from "@/components/LoadingState";
@@ -19,13 +19,8 @@ import { formatDate } from "@/lib/format";
 
 export default function UserPosts() {
   const { user } = useAuth();
-  const [db, setDb] = useState<ReturnType<typeof getFirebaseDb>>(null);
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    setDb(getFirebaseDb());
-  }, []);
 
   useEffect(() => {
     if (!db) {
@@ -59,9 +54,6 @@ export default function UserPosts() {
   }
 
   const handleDelete = (postId: string) => {
-    if (!db) {
-      return;
-    }
     void deleteDoc(doc(db, "posts", postId));
   };
 

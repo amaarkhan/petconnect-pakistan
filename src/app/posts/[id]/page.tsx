@@ -16,7 +16,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { useAuth } from "@/app/providers";
-import { getFirebaseDb } from "@/lib/firebase";
+import { db } from "@/lib/firebase";
 import type { Comment, Post } from "@/lib/types";
 import LoadingState from "@/components/LoadingState";
 import { formatDate } from "@/lib/format";
@@ -25,7 +25,6 @@ export default function PostDetailPage() {
   const { user } = useAuth();
   const params = useParams<{ id: string }>();
   const postId = params?.id;
-  const [db, setDb] = useState<ReturnType<typeof getFirebaseDb>>(null);
   const [post, setPost] = useState<Post | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
   const [commentText, setCommentText] = useState("");
@@ -34,9 +33,6 @@ export default function PostDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    setDb(getFirebaseDb());
-  }, []);
 
   useEffect(() => {
     if (!db || !postId) {

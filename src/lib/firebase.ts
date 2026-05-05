@@ -1,5 +1,5 @@
-import { getAnalytics } from "firebase/analytics";
-import { initializeApp, type FirebaseApp } from "firebase/app";
+import { getAnalytics, isSupported } from "firebase/analytics";
+import { getApp, getApps, initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
@@ -14,32 +14,16 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID ?? "",
 };
 
-let app: FirebaseApp | null = null;
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
-export const getFirebaseApp = () => {
-  if (typeof window === "undefined") {
-    return null;
-  }
-  if (!app) {
-    app = initializeApp(firebaseConfig);
-    if (firebaseConfig.measurementId) {
+if (typeof window !== "undefined") {
+  void isSupported().then((supported) => {
+    if (supported) {
       getAnalytics(app);
     }
-  }
-  return app;
-};
+  });
+}
 
-export const getFirebaseAuth = () => {
-  const firebaseApp = getFirebaseApp();
-  return firebaseApp ? getAuth(firebaseApp) : null;
-};
-
-export const getFirebaseDb = () => {
-  const firebaseApp = getFirebaseApp();
-  return firebaseApp ? getFirestore(firebaseApp) : null;
-};
-
-export const getFirebaseStorage = () => {
-  const firebaseApp = getFirebaseApp();
-  return firebaseApp ? getStorage(firebaseApp) : null;
-};
+export const auth = getAuth(app);
+export const db = getFirestore(app);
+export const storage = getStorage(app);

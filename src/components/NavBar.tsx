@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { signOut } from "firebase/auth";
 import { useAuth } from "@/app/providers";
-import { getFirebaseAuth } from "@/lib/firebase";
+import { auth } from "@/lib/firebase";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -14,7 +14,6 @@ const navLinks = [
 
 export default function NavBar() {
   const { user, loading } = useAuth();
-  const auth = getFirebaseAuth();
   const userInitial = (user?.displayName || user?.email || "U").trim().charAt(0).toUpperCase();
 
   return (

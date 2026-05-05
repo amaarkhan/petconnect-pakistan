@@ -1,18 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { useAuth } from "@/app/providers";
-import { getFirebaseDb } from "@/lib/firebase";
+import { db } from "@/lib/firebase";
 import { CITIES, POST_TYPES } from "@/lib/constants";
 import type { PostType } from "@/lib/types";
 
 export default function CreatePostPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const [db, setDb] = useState<ReturnType<typeof getFirebaseDb>>(null);
   const [type, setType] = useState<PostType>("lost");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -21,9 +20,6 @@ export default function CreatePostPage() {
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    setDb(getFirebaseDb());
-  }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

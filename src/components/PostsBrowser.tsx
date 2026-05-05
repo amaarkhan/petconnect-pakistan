@@ -9,7 +9,7 @@ import {
   where,
   type QueryConstraint,
 } from "firebase/firestore";
-import { getFirebaseDb } from "@/lib/firebase";
+import { db } from "@/lib/firebase";
 import { CITIES, POST_TYPES } from "@/lib/constants";
 import type { Post, PostType } from "@/lib/types";
 import PostCard from "@/components/PostCard";
@@ -21,16 +21,11 @@ const typeOptions = [
 ];
 
 export default function PostsBrowser() {
-  const [db, setDb] = useState<ReturnType<typeof getFirebaseDb>>(null);
   const [type, setType] = useState<"all" | PostType>("all");
   const [city, setCity] = useState<string>(CITIES[0] ?? "Peshawar");
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
-  useEffect(() => {
-    setDb(getFirebaseDb());
-  }, []);
 
   useEffect(() => {
     if (!db) {

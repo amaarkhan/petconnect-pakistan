@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { doc, getDoc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useAuth } from "@/app/providers";
-import { getFirebaseDb, getFirebaseStorage } from "@/lib/firebase";
+import { db, storage } from "@/lib/firebase";
 import { CITIES, POST_TYPES } from "@/lib/constants";
 import type { Post, PostType } from "@/lib/types";
 import LoadingState from "@/components/LoadingState";
@@ -14,8 +14,6 @@ import LoadingState from "@/components/LoadingState";
 export default function EditPostPage({ params }: { params: { id: string } }) {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const db = getFirebaseDb();
-  const storage = getFirebaseStorage();
   const [post, setPost] = useState<Post | null>(null);
   const [type, setType] = useState<PostType>("lost");
   const [title, setTitle] = useState("");
