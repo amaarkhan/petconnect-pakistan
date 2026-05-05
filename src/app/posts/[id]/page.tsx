@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useParams } from "next/navigation";
 import {
   addDoc,
   collection,
@@ -20,8 +21,10 @@ import type { Comment, Post } from "@/lib/types";
 import LoadingState from "@/components/LoadingState";
 import { formatDate } from "@/lib/format";
 
-export default function PostDetailPage({ params }: { params: { id: string } }) {
+export default function PostDetailPage() {
   const { user } = useAuth();
+  const params = useParams<{ id: string }>();
+  const postId = params?.id;
   const db = getFirebaseDb();
   const [post, setPost] = useState<Post | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
@@ -32,12 +35,12 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!db) {
+    if (!db || !postId) {
       return;
     }
     const fetchPost = async () => {
       try {
-        const snapshot = await getDoc(doc(db, "posts", params.id));
+        const snapshot = await getDoc(doc(db, "posts", postId));
         if (!snapshot.exists()) {
           setError("Post not found.");
           setLoading(false);
@@ -52,14 +55,14 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
     };
 
     fetchPost();
-  }, [params.id, db]);
+  }, [postId, db]);
 
   useEffect(() => {
-    if (!db) {
+    if (!db || !postId) {
       return;
     }
     const commentsQuery = query(
-      collection(db, "posts", params.id, "comments"),
+      collection(db, "posts", postId, "comments"),
       orderBy("createdAt", "asc"),
     );
 
@@ -77,7 +80,7 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
     );
 
     return () => unsubscribe();
-  }, [params.id, db]);
+  }, [postId, db]);
 
   const handleMarkFound = async () => {
     if (!post || !db) {
@@ -88,7 +91,7 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
   };
 
   const handleAddComment = async () => {
-    if (!db) {
+    if (!db || !postId) {
       return;
     }
     if (!user) {
@@ -104,7 +107,7 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
     setCommentLoading(true);
 
     try {
-      await addDoc(collection(db, "posts", params.id, "comments"), {
+      await addDoc(collection(db, "posts", postId, "comments"), {
         userId: user.uid,
         name: user.displayName || user.email || "Anonymous",
         body: trimmed,
