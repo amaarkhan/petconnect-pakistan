@@ -16,7 +16,7 @@ export default function CreatePostPage() {
   const [type, setType] = useState<PostType>("lost");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState(CITIES[0] ?? "Peshawar");
   const [contact, setContact] = useState("");
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
@@ -140,7 +140,6 @@ export default function CreatePostPage() {
               required
               className="mt-2 w-full rounded-2xl border border-black/15 px-4 py-3"
             >
-              <option value="">Select a city</option>
               {CITIES.map((city) => (
                 <option key={city} value={city}>
                   {city}
