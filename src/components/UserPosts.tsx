@@ -58,6 +58,13 @@ export default function UserPosts() {
     return null;
   }
 
+  const handleDelete = (postId: string) => {
+    if (!db) {
+      return;
+    }
+    void deleteDoc(doc(db, "posts", postId));
+  };
+
   return (
     <section className="mt-6">
       {loading && <LoadingState label="Loading your posts" />}
@@ -97,7 +104,7 @@ export default function UserPosts() {
                 </Link>
                 <button
                   type="button"
-                  onClick={() => deleteDoc(doc(db, "posts", post.id))}
+                  onClick={() => handleDelete(post.id)}
                   className="rounded-full border border-rose-200 px-4 py-2 text-sm font-semibold text-rose-700 transition hover:border-rose-300"
                 >
                   Delete
